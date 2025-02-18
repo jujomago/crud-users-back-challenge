@@ -1,13 +1,20 @@
-const express = require("express");
-const routes = require("./routes");
-const cors = require("cors");
+import express from "express";
+import dotenv from "dotenv";
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import { corsMiddleware } from "./middlewares/cors.js";
+
+dotenv.config();
 
 const app = express();
+app.use(express.json());
+app.use(corsMiddleware());
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Rutas
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 
-app.use(routes);
-
-app.listen(process.env.PORT, () => {
-  console.log("Server is running on http://localhost:3000");
-});
+app.listen(PORT, () =>
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`)
+);
